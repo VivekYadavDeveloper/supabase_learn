@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:supabase_learn/Db/notedb.dart';
 
 class NotePage extends StatefulWidget {
   const NotePage({super.key});

@@ -11,7 +11,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:supabase_learn/view/notes.page.dart';
 
 import '../view/login_page.dart';
-import '../view/profile_page.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
