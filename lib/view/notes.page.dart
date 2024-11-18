@@ -16,7 +16,7 @@ class _NotePageState extends State<NotePage> {
 
   /*-------------------------------------------------------*/
   /*
-  CREATE - A Note and Save in Supabase
+  CREATE - A Note and Save in  Supabase
    */
 /*-------------------------------------------------------*/
   void addNotes() {
