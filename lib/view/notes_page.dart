@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_learn/view/profile_page.dart';
 
 class NotePage extends StatefulWidget {
   const NotePage({super.key});
@@ -15,7 +19,7 @@ class _NotePageState extends State<NotePage> {
 
   /*-------------------------------------------------------*/
   /*
-  CREATE - A Note and Save in  Supabase
+  CREATE/ADD-NOTE WIDGET  - A Note and Save in  Supabase
    */
 /*-------------------------------------------------------*/
   void addNotes() {
@@ -29,8 +33,9 @@ class _NotePageState extends State<NotePage> {
               actions: [
                 TextButton(
                     onPressed: () {
-                      saveNote();
+                      createNote();
                       Navigator.pop(context);
+                      textEditingController.clear();
                     },
                     child: const Text("Save")),
                 TextButton(
@@ -45,28 +50,20 @@ class _NotePageState extends State<NotePage> {
 
 /*-------------------------------------------------------*/
   /*
-  SAVE - A Note in Supabase From App(Experimental)
+  SAVE/CREATE - A Note in Supabase From App(Experimental)
   */
   /*-------------------------------------------------------*/
 
-  void saveNote() async {
+  void createNote() async {
     /*Table Name*/
     await Supabase.instance.client
         .from('notes')
         .insert({'body': textEditingController.text});
   }
 
-/*-------------------------------------------------------*/
-  /*
-  READ - Notes From Supabase in App Using Stream Builder
-   */
-/*-------------------------------------------------------*/
-  final _notesStream =
-      Supabase.instance.client.from('notes').stream(primaryKey: ['id']);
-
   /*-------------------------------------------------------*/
   /*
-  UPDATE - Notes In Supabase
+  UPDATE/WIDGET - Notes In Supabase
    */
 /*-------------------------------------------------------*/
   void updateNoteDialog(int id, String currentText) {
@@ -74,7 +71,7 @@ class _NotePageState extends State<NotePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Edit Note"),
+        title: const Text("Update Note"),
         content: TextField(
           controller: textEditingController,
           decoration: const InputDecoration(hintText: "Enter updated note"),
@@ -118,9 +115,30 @@ class _NotePageState extends State<NotePage> {
     }
   }
 
+  /*-------------------------------------------------------*/
+  /*
+  READ - Notes From Supabase in App Using Stream Builder
+   */
+/*-------------------------------------------------------*/
+  final _notesStream =
+      Supabase.instance.client.from('notes').stream(primaryKey: ['id']);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Note"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfilePage()));
+              },
+              icon: const Icon(Icons.account_circle_rounded))
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           addNotes();
@@ -133,7 +151,7 @@ class _NotePageState extends State<NotePage> {
             builder: (context, snapShot) {
               /*When Loading*/
               if (!snapShot.hasData) {
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               } else {
                 /*When Loaded*/
 

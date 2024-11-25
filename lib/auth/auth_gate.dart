@@ -8,7 +8,7 @@ Authenticated -> Profile/ Home Page.
 
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:supabase_learn/view/notes.page.dart';
+import 'package:supabase_learn/view/notes_page.dart';
 
 import '../view/login_page.dart';
 
@@ -24,11 +24,11 @@ class AuthGate extends StatelessWidget {
 
         /*Build Appropriate Pages Based On Auth State*/
         builder: (context, snapShot) {
-          final sesion = snapShot.hasData ? snapShot.data!.session : null;
+          final session = snapShot.hasData ? snapShot.data!.session : null;
           /*Loading*/
           if (snapShot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          } else if (sesion != null) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (session != null) {
             return const NotePage();
           } else {
             return const LoginPage();
